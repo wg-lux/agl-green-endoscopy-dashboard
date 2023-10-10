@@ -1,0 +1,10 @@
+.chart-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+.total-weight {
+    font-size: 18px;
+    margin-top: 5px;
+}
+

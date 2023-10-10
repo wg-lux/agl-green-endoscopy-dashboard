@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Instrument-Emissions
+{% endblock %}
+
+{% block content %}
+    <h1>Example Instrument Emission Calculation</h1>
+
+    <div class="row">
+        <!-- Introduction Card -->
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    The shown data
+                </div>
+                <div class="card-body">
+                    <p>The shown data is sample data.</p>
+                    <p>For this, we generated 4,000 mockup examinations with including the used materials and instruments.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scope 3 Emissions Card -->
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    What is calculated?
+                </div>
+                <div class="card-body">
+                    <p>Scope 3 emissions for the instruments raw materials based on their weigt and the reference groups emission factors.</p>
+                    <p>
+                        The simulated transport routes are "overseas" and "europe" to demonstrate the environmental impact of shipping.
+                        In the shown example. we assumed a transport distance of 1000 km for "europe" and 10,000 km for "overseas".
+                        The transport emission factors were 0.13 (europe), respectively 1.3 (overseas) gCO2e per gram product (estimated by Intechnica GmbH)
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="accordion mb-4" id="accordionExample">
+        <!-- Summary Accordion -->
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    Summary Table
+                </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    {% include 'emission_summary_table.html' %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Detailed Data Accordion -->
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingTwo">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    Instrument Raw Material Emission
+                </button>
+            </h2>
+            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    <div id="productMaterialEmissionPlotDiv">
+                        <!-- bar chart displaying product Emission, PackageEmission, TransportEmissionEurope and TransportEmissionOverseas -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // Parse the JSON data passed from the Django view
+        var rawData = {{ df_json|safe }};
+        var data = JSON.parse(rawData);
+
+        // Initialize DataTable
+        $(document).ready(function() {
+            $('#summaryTable').DataTable({
+                data: data,
+                columns: [
+                    { data: 'ProductName' },
+                    { data: 'Quantity' },
+                    { data: 'ProductWeight' },
+                    { data: 'PackageWeight' },
+                    { data: 'ProductEmission' },
+                    { data: 'PackageEmission' },
+                    { data: 'TotalEmission' },
+                    { data: "Unit"},
+                ]
+            });
+        });
+
+        // Function to create Plotly bar chart for each row
+        function createBarChart(rowData, index) {
+            var trace = {
+                x: ['ProductEmission', 'PackageEmission', 'TransportEmissionEurope', 'TransportEmissionOverseas'],
+                y: [rowData.ProductEmission, rowData.PackageEmission, rowData.TransportEmissionEurope, rowData.TransportEmissionOverseas],
+                type: 'bar',
+                name: rowData.ProductName
+            };
+
+            var layout = {
+                title: rowData.ProductName + " (n = " + rowData.Quantity + ")" + ' Emissions (' + rowData.Unit + "CO2e)",
+            };
+
+            // Generate the chart in the specific div
+            Plotly.newPlot('productMaterialEmissionPlotDiv-' + index, [trace], layout);
+        }
+
+        // Create bar chart for each row in the DataFrame
+        data.forEach((rowData, index) => {
+            // Create a new div for the chart
+            var newDiv = document.createElement("div");
+            newDiv.id = 'productMaterialEmissionPlotDiv-' + index;
+            document.getElementById("productMaterialEmissionPlotDiv").appendChild(newDiv);
+
+            // Create the bar chart
+            createBarChart(rowData, index);
+        });
+    </script>
+
+{% endblock %}

@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Product Groups
+{% endblock %}
+
+{% block content %}
+    <h1>Product Groups</h1>
+    <div id="data-div" style="display:none;">{{ data|safe }}</div>
+    
+    {# <div id="data-div">{{ data|safe }}</div> #}
+    <div id="chart-container"></div>
+
+    <script>
+        // Retrieve the data from the hidden div and parse it
+        var rawData = document.getElementById("data-div").textContent;
+        var data = JSON.parse(rawData);
+
+        // Select a parent element where charts will be appended
+        var parentElement = document.getElementById("chart-container");
+
+        for (var groupIndex = 0; groupIndex < data.length; groupIndex++) {
+            var groupName = data[groupIndex].name;
+            var referenceProduct = data[groupIndex].reference_product;
+
+            // Create and append a header for the group
+            var groupHeader = document.createElement("h2");
+            groupHeader.textContent = groupName;
+            parentElement.appendChild(groupHeader);
+
+            var productName = referenceProduct.product.name_de;
+            var productMaterials = referenceProduct.product.product_materials;
+
+            // Separate materials based on 'product' and 'package'
+            var productMaterialsData = {};
+            var packageMaterialsData = {};
+
+            for (var materialIndex = 0; materialIndex < productMaterials.length; materialIndex++) {
+                var material = productMaterials[materialIndex];
+                var component = material.component;
+                var materialName = material.material.name_en;
+                var materialQuantity = material.quantity;
+                var unitAbbreviation = material.unit.abbreviation;
+
+                var legendName = materialName + " (" + unitAbbreviation + ")";
+
+                if (component === "product") {
+                    productMaterialsData[legendName] = materialQuantity;
+                } else if (component === "package") {
+                    packageMaterialsData[legendName] = materialQuantity;
+                }
+            }
+
+            // Calculate total weights
+            var totalProductWeight = Object.values(productMaterialsData).reduce((a, b) => a + b, 0);
+            var totalPackageWeight = Object.values(packageMaterialsData).reduce((a, b) => a + b, 0);
+
+            // Create a row div to contain both charts
+            var chartRowDiv = document.createElement("div");
+            chartRowDiv.className = "chart-row";
+
+            // Function to create pie chart
+            function createPieChart(materialData, titleSuffix, container) {
+                var labels = Object.keys(materialData);
+                var values = Object.values(materialData);
+
+                var trace = {
+                    labels: labels,
+                    values: values,
+                    type: 'pie'
+                };
+
+                var layout = {
+                    title: productName + ' ' + titleSuffix
+                };
+
+                // Create and append a div for the chart
+                var chartDiv = document.createElement("div");
+                var chartId = 'chart-' + (groupIndex + 1) + '-' + titleSuffix;
+                chartDiv.id = chartId;
+                container.appendChild(chartDiv);
+
+                // Generate the chart
+                Plotly.newPlot(chartId, [trace], layout);
+            }
+
+            // Create pie charts
+            parentElement.appendChild(chartRowDiv);
+            createPieChart(productMaterialsData, 'Product Material Composition', chartRowDiv);
+            createPieChart(packageMaterialsData, 'Package Material Composition', chartRowDiv);
+
+            // Append the row to the parent element
+            parentElement.appendChild(chartRowDiv);
+
+            // Add total weight text elements
+            var totalProductWeightText = document.createElement("div");
+            totalProductWeightText.className = "total-weight";
+            totalProductWeightText.textContent = "Total Product Weight: " + totalProductWeight.toFixed(2) + " kg";
+            parentElement.appendChild(totalProductWeightText);
+
+            var totalPackageWeightText = document.createElement("div");
+            totalPackageWeightText.className = "total-weight";
+            totalPackageWeightText.textContent = "Total Package Weight: " + totalPackageWeight.toFixed(2) + " kg";
+            parentElement.appendChild(totalPackageWeightText);
+            
+        }
+
+    </script>
+{% endblock %}

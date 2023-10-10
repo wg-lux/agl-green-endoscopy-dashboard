@@ -1,0 +1,44 @@
+- fields:
+    product: extraction_balloon_escort_2
+    product_group: Balloon
+  model: green_endoscopy_dashboard.ReferenceProduct
+- fields:
+    product: esophageal_dilator
+    product_group: Bougie
+  model: green_endoscopy_dashboard.ReferenceProduct
+- fields:
+    product: visiglide_2
+    product_group: Wire
+  model: green_endoscopy_dashboard.ReferenceProduct
+- fields:
+    product: peg_freka_15_ch
+    product_group: PEG
+  model: green_endoscopy_dashboard.ReferenceProduct
+- fields:
+    product: biopsy_grasper_hot_radial_jaw_4
+    product_group: Instrument
+  model: green_endoscopy_dashboard.ReferenceProduct
+- fields:
+    product: nitinol_stent_aix_oel
+    product_group: Metal-Stent
+  model: green_endoscopy_dashboard.ReferenceProduct
+- fields:
+    product: biliary_stent_cotton_leung_sof_flex
+    product_group: Plastic-Stent
+  model: green_endoscopy_dashboard.ReferenceProduct
+- fields:
+    product: bite_protector
+    product_group: Plastic
+  model: green_endoscopy_dashboard.ReferenceProduct
+- fields:
+    product: pressure_syringe_60_ml
+    product_group: Plastic-Large
+  model: green_endoscopy_dashboard.ReferenceProduct
+- fields:
+    product: foliodress_gown_standard
+    product_group: Coat
+  model: green_endoscopy_dashboard.ReferenceProduct
+- fields:
+    product: absorbant_pad
+    product_group: Absorbant-Pad
+  model: green_endoscopy_dashboard.ReferenceProduct

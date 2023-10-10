@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block content %}
+    <h1>Introduction to our Green-Endoscopy Dashboard</h1>
+
+    <div class="row">
+        <!-- Introduction Card -->
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    About Our Paper
+                </div>
+                <div class="card-body">
+                    <p>We published a paper calculating the Carbon footprint of our GI-endoscopy unit, with a focus on Scope 3 emissions.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scope 3 Emissions Card -->
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    What are Scope 3 Emissions?
+                </div>
+                <div class="card-body">
+                    <p>Scope 3 emissions include all indirect emissions that occur in a company's value chain.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="accordion mb-4" id="accordionExample">
+        <!-- Online Tool Accordion -->
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    Our Online Tool
+                </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    <p>This online tool demonstrates a feasible approach to calculate CO2 emissions of the instruments used during an endoscopy.</p>
+                    <p>Disclaimer: Our tool underestimates the CO2 emission since the manufacturing process itself (raw materials to product) are not included as manufacturers did not provide the necessary information.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detailed Data Accordion -->
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingTwo">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    Data & Methodology
+                </button>
+            </h2>
+            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    <p>Detailed data regarding CO2 emissions or material composition of the used instruments is not available.</p>
+                    <p>For this, we created 11 reference groups representing frequently used materials in GI-endoscopy. We disassembled the most frequently used instrument in each group and determined its material composition manually.</p>
+                    <p>Emission factors for raw-materials were looked up in commercially available databases* with the help of "Intechnica".</p>
+                    <p>*: EcoInvent 3.8 and UK Government GHG Conversion Factors for Company Reporting (2022, Version 2.0)</p>
+                    <ul>
+                        <li>All materials of the reference groups were weighed and multiplied by the corresponding emission factor to determine the total product emission.</li>
+                        <li>Total product emission was divided by total product weight to determine the emission factor.</li>
+                        <li>Other products were weighed and then multiplied with the corresponding group's emission factor.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h3>Product Groups</h3>
+    <div class="row">
+        {% for product_group in product_groups %}
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        {{ product_group.name }}
+                    </div>
+                    <div class="card-body">
+                        <h5>Reference Product: {{ product_group.reference_product.product.name_de }}</h5>
+                        <p><strong>Total Emission Factor: </strong>{{ product_group.reference_product.emission_factor_total.value }} kgCO2e per kg </p>
+                        <p><strong>Product Emission Factor: </strong>{{ product_group.reference_product.emission_factor_product.value }} kgCO2e per kg</p>
+                        <p><strong>Package Emission Factor: </strong>{{ product_group.reference_product.emission_factor_package.value }} kgCO2e per kg</p>
+                        <hr>
+                        <ul>
+                            {% for material in product_group.reference_product.product.product_materials %}
+                                <li>
+                                    <strong>{{ material.component }} Material: </strong>{{ material.material.name_en }}
+                                    {{ material.quantity }} {{ material.unit.abbreviation }} <br>
+                                    <strong>Emission: </strong>{{ material.emission }} {{ material.emission_unit }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock %}

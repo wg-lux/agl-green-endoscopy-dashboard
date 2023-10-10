@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "agl-green-endoscopy-dashboard"
+version = "0.1.0"
+description = "Dashboard to display the carbon footprint of an endoscopy unit"
+authors = ["Thomas J. Lux"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11,<3.13"
+Django = "^4.2.6"
+djangorestframework = "^3.14.0"
+django-bootstrap5 = "^23.3"
+agl-base-db = "^0.1.7"
+pandas = "^2.1.1"
+pyyaml = "^6.0.1"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

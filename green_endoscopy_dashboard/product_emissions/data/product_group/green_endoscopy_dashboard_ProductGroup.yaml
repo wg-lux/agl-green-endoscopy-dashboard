@@ -1,0 +1,33 @@
+- fields:
+    name: Balloon
+  model: green_endoscopy_dashboard.ProductGroup
+- fields:
+    name: Bougie
+  model: green_endoscopy_dashboard.ProductGroup
+- fields:
+    name: Wire
+  model: green_endoscopy_dashboard.ProductGroup
+- fields:
+    name: PEG
+  model: green_endoscopy_dashboard.ProductGroup
+- fields:
+    name: Instrument
+  model: green_endoscopy_dashboard.ProductGroup
+- fields:
+    name: Metal-Stent
+  model: green_endoscopy_dashboard.ProductGroup
+- fields:
+    name: Plastic-Stent
+  model: green_endoscopy_dashboard.ProductGroup
+- fields:
+    name: Plastic
+  model: green_endoscopy_dashboard.ProductGroup
+- fields:
+    name: Plastic-Large
+  model: green_endoscopy_dashboard.ProductGroup
+- fields:
+    name: Coat
+  model: green_endoscopy_dashboard.ProductGroup
+- fields:
+    name: Absorbant-Pad
+  model: green_endoscopy_dashboard.ProductGroup
