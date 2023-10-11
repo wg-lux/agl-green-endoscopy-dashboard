@@ -29,7 +29,8 @@ def home_view(request):
     if not ref_product.emission_factor_total:
         for product_group in product_groups:
             print(f"set_emission_factors for {product_group}")
-            product_group.reference_product.set_emission_factors()
+            if True:
+                product_group.reference_product.set_emission_factors()
 
 
     serializer = ProductGroupSerializer(product_groups, many=True)
