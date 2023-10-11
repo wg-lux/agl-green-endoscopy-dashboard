@@ -24,12 +24,12 @@ def home_view(request):
     product_groups = ProductGroup.objects.prefetch_related(
         'reference_product__product__product_materials').all()
 
-    ref_product = ReferenceProduct.objects.filter(product_group=product_groups[0]).first()
+    ref_product = ReferenceProduct.objects.filter(product_group=product_groups[1]).first()
 
     if not ref_product.emission_factor_total:
         for product_group in product_groups:
             print(f"set_emission_factors for {product_group}")
-            ref_product.set_emission_factors()
+            product_group.reference_product.set_emission_factors()
 
 
     serializer = ProductGroupSerializer(product_groups, many=True)
