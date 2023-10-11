@@ -1,5 +1,4 @@
 from pathlib import Path
-from tkinter import CENTER
 
 DATA_DIR = Path(__file__).resolve().parent
 
