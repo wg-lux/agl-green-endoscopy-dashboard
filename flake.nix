@@ -18,6 +18,12 @@
           config.allowUnfree = true;
           config.cudaSupport = true;
         };
+        nvidiaCache = cachix.lib.mkCachixCache {
+          inherit (pkgs) lib;
+          name = "nvidia";
+          publicKey = "nvidia.cachix.org-1:dSyZxI8geDCJrwgvBfPH3zHMC+PO6y/BT7O6zLBOv0w=";
+          secretKey = null;  # not needed for pulling from the cache
+        };
 
     in
         {
