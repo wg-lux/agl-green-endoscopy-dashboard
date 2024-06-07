@@ -1,4 +1,5 @@
-*/migrations/*
+.direnv/*
+# */migrations/*
 
 db.sqlite3
 *.pyc
